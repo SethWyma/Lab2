@@ -1,5 +1,7 @@
 import edu.illinois.cs.cs125.lib.mazemaker.Maze;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Solve a randomly-generated maze.
  *
@@ -15,6 +17,18 @@ public class SolveMaze {
      *
      * @param unused unused input arguments
      */
+
+    public static boolean wallOnRight(final Maze maze){
+        boolean toReturn;
+        maze.turnRight();
+        if (!maze.canMove()) {
+            toReturn = true;
+        } else {
+            toReturn = false;
+        }
+        maze.turnLeft();
+        return toReturn;
+    }
 
     public static void main(final String[] unused) {
         /*
@@ -33,8 +47,26 @@ public class SolveMaze {
          * You should be able to solve a 10 x 10 maze in (far fewer than) 1000 steps.
          * Feel free to adjust this number if you experiment with other mazes.
          */
+
+
+
         for (int step = 0; step < 1000; step++) {
             // Implement your maze solving algorithm here
+            if (!wallOnRight(maze)) {
+                maze.turnRight();
+                maze.move();
+            } else if (wallOnRight(maze) && !maze.canMove()) {
+                maze.turnLeft();
+                maze.move();
+            } else {
+                maze.move();
+            }
+            System.out.println(maze);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         if (maze.isFinished()) {
